@@ -22,7 +22,11 @@ char *my_strtok(char *src, const char *delims)
 	char *token = NULL;
 
 	if (src)
+	{
+		while (is_delim(*src, delims))
+			src++;
 		ptr = src;
+	}
 
 	if (!ptr)
 		return (NULL);
@@ -33,12 +37,17 @@ char *my_strtok(char *src, const char *delims)
 	{
 		if (is_delim(*ptr, delims))
 		{
-			*ptr = '\0';
-			ptr++;
-			return (token);
+			*ptr++ = '\0';
+			while (is_delim(*ptr, delims))
+				ptr++;
+			break;
 		}
 		ptr++;
 	}
+
+	while (is_delim(*ptr, delims))
+		ptr++;
+
 	if (*(ptr) == '\0')
 	{
 		ptr = NULL;
@@ -59,7 +68,7 @@ int main(void)
 	}
 	*/
 	const char *DELIMITERS = " ";
-	char buffer2[] = "token1 token2 token3 token4 token5";
+	char buffer2[] = "  token1  token2   token3    ";
 	char *token = my_strtok(buffer2, DELIMITERS);
 	while (token)
 	{
