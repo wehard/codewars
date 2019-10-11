@@ -18,33 +18,37 @@ bool is_delim(char c, const char *delims)
 
 char *my_strtok(char *src, const char *delims)
 {
-	static char *next_start;
-	int i;
+	static char *ptr;
+	char *token = NULL;
 
 	if (src)
-		next_start = NULL;
-	if (next_start)
-		src = next_start;
-	if (!src && !next_start)
-		return NULL;
-	i = 0;
-	while (!is_delim(src[i], delims) && src[i] != '\0')
-		i++;
-	if (src[i + 1] != '\0')
-	{
-		src[i] = '\0';
-		next_start = src + i + 1;
-		return (src);
-	}
-	else
-	{
-		next_start = NULL;
+		ptr = src;
+
+	if (!ptr)
 		return (NULL);
+	
+	token = ptr;
+
+	while (*ptr != '\0')
+	{
+		if (is_delim(*ptr, delims))
+		{
+			*ptr = '\0';
+			ptr++;
+			return (token);
+		}
+		ptr++;
 	}
+	if (*(ptr) == '\0')
+	{
+		ptr = NULL;
+	}
+	return (token);
 }
 
 int main(void)
 {
+	/*
 	char buffer[] = "I did it MY way!";
 	const char *DELIMITERS = " ";
 	char *token = my_strtok(buffer, DELIMITERS);
@@ -53,12 +57,13 @@ int main(void)
 		(void)printf("%s|", token);
 		token = my_strtok(NULL, DELIMITERS);
 	}
-
-	char buffer2[] = "Hello World This is It";
-	token = my_strtok(buffer2, DELIMITERS);
+	*/
+	const char *DELIMITERS = " ";
+	char buffer2[] = "token1 token2 token3 token4 token5";
+	char *token = my_strtok(buffer2, DELIMITERS);
 	while (token)
 	{
-		(void)printf("%s|", token);
+		(void)printf("[%s]", token);
 		token = my_strtok(NULL, DELIMITERS);
 	}
 	return (0);
